@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lecture Summarizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="top-dock">
+        <div class="dock-head">
+          <div class="brand">
+            <h1>Lecture Summarizer</h1>
+            <p>One PDF. Three study modes.</p>
+          </div>
+          <button type="button" id="theme-toggle" class="ghost">Dark mode</button>
+        </div>
+
+        <nav class="dock-tabs" aria-label="Feature pages">
+          <button class="dock-tab is-active" data-tab="summary-page" type="button">Summary</button>
+          <button class="dock-tab" data-tab="flashcards-page" type="button">Flashcards</button>
+          <button class="dock-tab" data-tab="quiz-page" type="button">Quiz</button>
+        </nav>
+      </header>
+
+      <section class="drop-card">
+        <form id="upload-form" enctype="multipart/form-data" novalidate>
+          <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Upload PDF">
+            <input type="file" id="file" name="file" accept=".pdf,application/pdf" />
+            <h2>Drop your lecture PDF here</h2>
+            <p class="hint">or click to browse</p>
+            <p class="file-name" id="file-name" aria-live="polite"></p>
+          </div>
+          <div class="actions">
+            <button type="button" class="ghost" id="reset">New file</button>
+          </div>
+        </form>
+        <div class="error-banner" id="error" role="alert"></div>
+        <div class="loading-wrap" id="loading" aria-live="polite" aria-busy="false">
+          <div class="spinner" aria-hidden="true"></div>
+          <p class="loading-text" id="loading-text">Generating...</p>
+        </div>
+      </section>
+
+      <main class="pages">
+        <section class="page is-active" id="summary-page">
+          <div class="result-header">
+            <h2>Summary</h2>
+            <div class="copy-row">
+              <button type="button" class="primary" id="generate-summary">Generate summary</button>
+              <button type="button" class="ghost" id="copy">Copy</button>
+            </div>
+          </div>
+          <article class="summary-prose" id="summary"></article>
+          <p class="empty-state" id="summary-empty">Generate a full study summary from your PDF.</p>
+        </section>
+
+        <section class="page" id="flashcards-page">
+          <div class="result-header">
+            <h2>Flashcards</h2>
+            <div class="copy-row">
+              <button type="button" class="primary" id="generate-flashcards">Generate flashcards</button>
+            </div>
+          </div>
+          <p class="flashcards-hint">Click a card to flip it.</p>
+          <div class="flashcards-grid" id="flashcards-grid"></div>
+          <p class="empty-state" id="flashcards-empty">Generate Q/A cards for active recall.</p>
+        </section>
+
+        <section class="page" id="quiz-page">
+          <div class="result-header">
+            <h2>Quiz</h2>
+            <div class="copy-row">
+              <button type="button" class="primary" id="generate-quiz">Generate quiz</button>
+              <button type="button" class="ghost" id="regenerate-quiz">Regenerate</button>
+            </div>
+          </div>
+          <p class="flashcards-hint">10 MCQs. Submit to get your mark /10.</p>
+          <form id="quiz-form" class="quiz-form"></form>
+          <div class="quiz-actions">
+            <button type="button" class="primary" id="submit-quiz">Submit quiz</button>
+          </div>
+          <div class="quiz-score" id="quiz-score" aria-live="polite"></div>
+          <p class="empty-state" id="quiz-empty">Generate a quiz to test yourself.</p>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status">Copied to clipboard</div>
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.1/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  </body>
+</html>
